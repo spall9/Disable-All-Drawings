@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Color = System.Drawing.Color;
 
-#region
+#region EloBuddy
 using EloBuddy;
 using EloBuddy.SDK;
 using EloBuddy.SDK.Enumerations;
