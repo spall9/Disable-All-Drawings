@@ -25,9 +25,6 @@ namespace Dragonblade_Talon
             if (Player.Instance.Hero != Champion.Talon)
                 return;
 
-            if (!Updated())
-                return;
-
             Settings.Load();
 
             Game.OnTick += delegate
