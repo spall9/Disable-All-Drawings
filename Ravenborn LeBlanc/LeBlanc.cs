@@ -185,5 +185,15 @@ namespace Ravenborn_LeBlanc
                 }
             };
         }
+
+        public static void Example()
+        {
+            Dash.OnDash += Dash_OnDash;
+        }
+
+        private static void Dash_OnDash(Obj_AI_Base sender, Dash.DashEventArgs e)
+        {
+            Chat.Print("Sender: " + sender.BaseSkinName);
+        }
     }
 }

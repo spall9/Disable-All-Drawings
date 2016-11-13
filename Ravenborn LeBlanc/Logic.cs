@@ -41,13 +41,11 @@ namespace Ravenborn_LeBlanc
                         if (GetState(SpellSlot.W) == State.WReturn)
                         {
                             Player.CastSpell(SpellSlot.W);
-                            Chat.Print("Logic W");
                         }
 
                         if (GetState(SpellSlot.R) == State.RWReturn)
                         {
                             Player.CastSpell(SpellSlot.R);
-                            Chat.Print("Logic R");
                         }
 
                         return true;
@@ -70,11 +68,9 @@ namespace Ravenborn_LeBlanc
                     if (GetState(SpellSlot.R) != State.RRCast)
                     {
                         R.Cast();
-                        Chat.Print("Q");
                     }
 
                     Q.Cast(T);
-                    Chat.Print("QQ");
                 }
 
                 if (T.IsValidTarget(W.Range) && S == SpellSlot.W)
@@ -86,11 +82,9 @@ namespace Ravenborn_LeBlanc
                         if (GetState(SpellSlot.R) != State.RRCast)
                         {
                             R.Cast();
-                            Chat.Print("W");
                         }
 
                         W.Cast(PredW.CastPosition);
-                        Chat.Print("WW");
                     }
                 }
 
@@ -103,11 +97,9 @@ namespace Ravenborn_LeBlanc
                         if (GetState(SpellSlot.R) != State.RRCast)
                         {
                             R.Cast();
-                            Chat.Print("E");
                         }
 
                         E.Cast(PredE.CastPosition);
-                        Chat.Print("EE");
                     }
                 }
             }
