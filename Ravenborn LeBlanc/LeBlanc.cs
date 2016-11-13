@@ -67,7 +67,11 @@ namespace Ravenborn_LeBlanc
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
                 {
                     Modes.Combo.Load();
-                    Logic.Return();
+
+                    if (CheckBox(Settings.Combo, "W1"))
+                    {
+                        Logic.Return();
+                    }
                 }
 
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))

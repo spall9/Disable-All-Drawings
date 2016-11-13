@@ -27,6 +27,7 @@ namespace Ravenborn_LeBlanc
             Combo = Principal.AddSubMenu("Combo", "Combo");
             Combo.Add("Q", new CheckBox("Use Q?"));
             Combo.Add("W", new CheckBox("Use W?"));
+            Combo.Add("W1", new CheckBox("Auto Return W/R?"));
             Combo.Add("E", new CheckBox("Use E?"));
             Combo.Add("R", new CheckBox("Use R?"));
             Combo.Add("SR", new ComboBox("Focus R Spell:", 0, "Q", "W", "E"));
