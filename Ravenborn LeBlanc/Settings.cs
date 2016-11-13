@@ -19,7 +19,7 @@ namespace Ravenborn_LeBlanc
 {
     class Settings
     {
-        public static Menu Principal, Combo, Lane, Jungle, Misc, Draw;
+        public static Menu Principal, Combo, Harass, Lane, Jungle, Misc, Draw;
 
         public static void Load()
         {
@@ -30,6 +30,12 @@ namespace Ravenborn_LeBlanc
             Combo.Add("E", new CheckBox("Use E?"));
             Combo.Add("R", new CheckBox("Use R?"));
             Combo.Add("SR", new ComboBox("Focus R Spell:", 0, "Q", "W", "E"));
+
+            Harass = Principal.AddSubMenu("Harass", "Harass");
+            Harass.Add("Key", new KeyBind("Harass Key:", false, KeyBind.BindTypes.PressToggle, 'H'));
+            Harass.Add("Q", new CheckBox("Use Q?"));
+            Harass.Add("W", new CheckBox("Use W?"));
+            Harass.Add("E", new CheckBox("Use E?"));
 
             Lane = Principal.AddSubMenu("Laneclear", "Lane");
             Lane.AddLabel("About Q:");
@@ -56,6 +62,7 @@ namespace Ravenborn_LeBlanc
             Draw.Add("Q", new CheckBox("Draw Q?"));
             Draw.Add("W", new CheckBox("Draw W?"));
             Draw.Add("E", new CheckBox("Draw E?"));
+            Draw.Add("DMG", new CheckBox("Draw Combo Damage?"));
         }
     }
 }

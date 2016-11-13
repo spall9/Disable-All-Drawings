@@ -20,27 +20,90 @@ namespace Ravenborn_LeBlanc
 {
     class LeBlanc : Extensions
     {
+        public static DamageIndicator Damage;
+
         public static void Loading(EventArgs arg)
         {
             if (Player.Instance.Hero != Champion.Leblanc)
                 return;
 
             Settings.Load();
+            Damage = new DamageIndicator();
+            Updated();
 
             Game.OnTick += delegate
             {
+                if (!W.IsReady())
+                {
+                    if (GetState(SpellSlot.W) == State.WReturn)
+                        return;
+
+                    var Remove = About.FirstOrDefault(x => x.NetworkID == Player.Instance.NetworkId && x.IsRW == false);
+
+                    if (Remove != null)
+                    {
+                        About.Remove(Remove);
+                    }
+                }
+
+                if (!R.IsReady())
+                {
+                    if (GetState(SpellSlot.R) == State.RWReturn)
+                        return;
+
+                    var Remove = About.FirstOrDefault(x => x.NetworkID == Player.Instance.NetworkId && x.IsRW == true);
+
+                    if (Remove != null)
+                    {
+                        About.Remove(Remove);
+                    }
+                }
+
+                if (Keybind(Settings.Harass, "Key"))
+                {
+                    Modes.Harass.Load();
+                }
+
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Combo))
+                {
                     Modes.Combo.Load();
+                    Logic.Return();
+                }
 
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.LaneClear))
+                {
                     Modes.Lane.Load();
+                }
 
                 if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.JungleClear))
-                    Modes.Jungle.Load();
-
-                if (Orbwalker.ActiveModesFlags.HasFlag(Orbwalker.ActiveModes.Flee))
                 {
-                    Chat.Print(GetState(SpellSlot.R));
+                    Modes.Jungle.Load();
+                }
+            };
+
+            Obj_AI_Base.OnProcessSpellCast += delegate (Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+            {
+                if (sender.IsMe)
+                {
+                    if (args.SData.Name == "LeblancW")
+                    {
+                        About.Add(new Base
+                        {
+                            Pos = args.Start,
+                            IsRW = false,
+                            NetworkID = sender.NetworkId
+                        });
+                    }
+
+                    if (args.SData.Name == "LeblancRW")
+                    {
+                        About.Add(new Base
+                        {
+                            Pos = args.Start,
+                            IsRW = true,
+                            NetworkID = sender.NetworkId
+                        });
+                    }
                 }
             };
 
@@ -96,6 +159,16 @@ namespace Ravenborn_LeBlanc
 
             Drawing.OnEndScene += delegate
             {
+                foreach (var L in About)
+                {
+                    if (L.IsRW)
+                    {
+                        Drawing.DrawCircle(L.Pos, 120, Color.Purple);
+                    }
+
+                    Drawing.DrawCircle(L.Pos, 120, Color.DarkOrange);
+                }
+
                 if (CheckBox(Settings.Draw, "Q") && Q.IsReady())
                 {
                     Q.DrawRange(Color.Purple, 4);

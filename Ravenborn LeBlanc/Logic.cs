@@ -19,20 +19,43 @@ namespace Ravenborn_LeBlanc
 {
     class Logic : Extensions
     {
-        private static bool QW;
-
-        public static void LQ()
+        public static bool Return()
         {
-            /*
-             *  
-             * 
-             * 
-            */    
-        }
+            if (GetState(SpellSlot.W) == State.WReturn || GetState(SpellSlot.W) == State.RWReturn)
+            {
+                foreach (var Hero in EntityManager.Heroes.Enemies)
+                {
+                    foreach (var Loc in About)
+                    {
+                        if (Hero.HasBuff("LeBlancEBeam") && Hero.IsValidTarget(E.Range))
+                            return false;
 
-        public static void LW()
-        {
+                        var EPos = Player.Instance.CountEnemiesInRange(Player.Instance.GetAutoAttackRange());
+                        var EWPos = Loc.Pos.CountEnemiesInRange(Player.Instance.GetAutoAttackRange());
+                        var APos = Player.Instance.CountAlliesInRange(Player.Instance.GetAutoAttackRange());
+                        var AWPos = Loc.Pos.CountAlliesInRange(Player.Instance.GetAutoAttackRange());
 
+                        if (EPos > APos || EWPos > AWPos || UnderEnemyTurret(Loc.Pos))
+                            return false;
+
+                        if (GetState(SpellSlot.W) == State.WReturn)
+                        {
+                            Player.CastSpell(SpellSlot.W);
+                            Chat.Print("Logic W");
+                        }
+
+                        if (GetState(SpellSlot.R) == State.RWReturn)
+                        {
+                            Player.CastSpell(SpellSlot.R);
+                            Chat.Print("Logic R");
+                        }
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public static void LR(SpellSlot S, AIHeroClient T)
@@ -42,41 +65,50 @@ namespace Ravenborn_LeBlanc
 
             if (R.IsReady() && GetState(SpellSlot.R) == State.RNormal)
             {
-                switch (S)
+                if (T.IsValidTarget(Q.Range) && S == SpellSlot.Q)
                 {
-                    case SpellSlot.Q:
-                        if (T.IsValidTarget(Q.Range))
+                    if (GetState(SpellSlot.R) != State.RRCast)
+                    {
+                        R.Cast();
+                        Chat.Print("Q");
+                    }
+
+                    Q.Cast(T);
+                    Chat.Print("QQ");
+                }
+
+                if (T.IsValidTarget(W.Range) && S == SpellSlot.W)
+                {
+                    var PredW = W.GetPrediction(T);
+
+                    if (PredW.HitChance >= HitChance.High)
+                    {
+                        if (GetState(SpellSlot.R) != State.RRCast)
                         {
                             R.Cast();
-                            Player.CastSpell(SpellSlot.R, T);
+                            Chat.Print("W");
                         }
-                        break;
 
-                    case SpellSlot.W:
-                        if (T.IsValidTarget(W.Range))
+                        W.Cast(PredW.CastPosition);
+                        Chat.Print("WW");
+                    }
+                }
+
+                if (T.IsValidTarget(E.Range) && S == SpellSlot.E)
+                {
+                    var PredE = E.GetPrediction(T);
+
+                    if (PredE.HitChance >= HitChance.High)
+                    {
+                        if (GetState(SpellSlot.R) != State.RRCast)
                         {
-                            var Pred = W.GetPrediction(T);
-
-                            if (Pred.HitChance >= HitChance.High)
-                            {
-                                R.Cast();
-                                Player.CastSpell(SpellSlot.R, Pred.CastPosition);
-                            }
+                            R.Cast();
+                            Chat.Print("E");
                         }
-                        break;
 
-                    case SpellSlot.E:
-                        if (T.IsValidTarget(E.Range))
-                        {
-                            var Pred = E.GetPrediction(T);
-
-                            if (Pred.HitChance >= HitChance.High)
-                            {
-                                R.Cast();
-                                Player.CastSpell(SpellSlot.R, Pred.CastPosition);
-                            }
-                        }
-                        break;
+                        E.Cast(PredE.CastPosition);
+                        Chat.Print("EE");
+                    }
                 }
             }
         }

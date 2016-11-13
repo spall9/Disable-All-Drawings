@@ -17,7 +17,7 @@ using SharpDX;
 
 namespace Ravenborn_LeBlanc.Modes
 {
-    public class Combo : Extensions
+    class Harass : Extensions
     {
         public static void Load()
         {
@@ -25,7 +25,7 @@ namespace Ravenborn_LeBlanc.Modes
 
             if (Target != null && GetState(SpellSlot.R) != State.RRCast)
             {
-                if (W.IsReady() && CheckBox(Settings.Combo, "W"))
+                if (W.IsReady() && CheckBox(Settings.Harass, "W"))
                 {
                     if (Target.IsValidTarget(W.Range) && GetState(SpellSlot.W) != State.WReturn)
                     {
@@ -38,7 +38,7 @@ namespace Ravenborn_LeBlanc.Modes
                     }
                 }
 
-                if (Q.IsReady() && CheckBox(Settings.Combo, "Q"))
+                if (Q.IsReady() && CheckBox(Settings.Harass, "Q"))
                 {
                     if (Target.IsValidTarget(Q.Range))
                     {
@@ -46,7 +46,7 @@ namespace Ravenborn_LeBlanc.Modes
                     }
                 }
 
-                if (E.IsReady() && CheckBox(Settings.Combo, "E"))
+                if (E.IsReady() && CheckBox(Settings.Harass, "E"))
                 {
                     if (Target.IsValidTarget(E.Range))
                     {
@@ -57,11 +57,6 @@ namespace Ravenborn_LeBlanc.Modes
                             E.Cast(Pred.UnitPosition);
                         }
                     }
-                }
-                
-                if (CheckBox(Settings.Combo, "R"))
-                {
-                    Logic.LR(ReturnSlot(ComboBox(Settings.Combo, "SR")), Target);
                 }
             }
         }

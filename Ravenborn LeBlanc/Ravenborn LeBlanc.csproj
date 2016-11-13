@@ -73,10 +73,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DamageIndicator.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="LeBlanc.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="Modes\Combo.cs" />
+    <Compile Include="Modes\Harass.cs" />
     <Compile Include="Modes\Jungle.cs" />
     <Compile Include="Modes\Lane.cs" />
     <Compile Include="Program.cs" />
